@@ -1,0 +1,64 @@
+# Two config files, both written by the lab. renovate-good.json:
+
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "schedule": ["before 6am on monday"],
+  "packageRules": [
+    {
+      "matchManagers": ["npm"],
+      "groupName": "npm packages"
+    },
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
+    }
+  ]
+}
+
+# renovate-broken.json — four planted mistakes: a misspelled preset,
+# a string where a boolean belongs, an unparseable schedule, and an
+# option that does not exist.
+
+{
+  "extends": ["config:recomended"],
+  "automerge": "yes please",
+  "schedule": ["whenever"],
+  "unknownOption": true
+}
+
+$ renovate-config-validator renovate-good.json
+ WARN: RE2 not usable, falling back to RegExp: regex validation may be inaccurate
+       (the optional native RE2 module was not built by this npm install;
+        Renovate continues with plain RegExp. The long stack trace is elided.)
+ INFO: Validating renovate-good.json as global config
+ INFO: Config validated successfully against 1 file(s)
+exit code: 0
+
+$ renovate-config-validator renovate-broken.json
+ WARN: RE2 not usable, falling back to RegExp: regex validation may be inaccurate
+ INFO: Validating renovate-broken.json as global config
+ERROR: Found errors in configuration
+       "file": "renovate-broken.json",
+       "errors": [
+         {
+           "topic": "Configuration Error",
+           "message": "Configuration option `automerge` should be boolean. Found: \"yes please\" (string)"
+         },
+         {
+           "topic": "Configuration Error",
+           "message": "Invalid configuration option: unknownOption"
+         },
+         {
+           "topic": "Configuration Error",
+           "message": "Invalid schedule: `Invalid schedule: Failed to parse \"whenever\"`"
+         }
+       ]
+exit code: 1
+
+# Note what is NOT in the error list: the misspelled preset
+# "config:recomended". The validator checks structure, types and
+# schedules. Preset names are only resolved when Renovate runs
+# against a real platform, so a typo there passes validation and
+# fails later, in the run itself.

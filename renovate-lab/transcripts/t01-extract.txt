@@ -1,0 +1,72 @@
+$ cd fixture
+$ LOG_LEVEL=debug renovate --platform=local --dry-run=extract --base-dir=~/workspace/renovate-labwork/base
+(debug log trimmed to the extraction evidence; the run took about 2 seconds)
+
+ INFO: Repository started (repository=local)
+       "renovateVersion": "44.198.2"
+DEBUG: Using localDir: /home/hatch/workspace/renovate-labwork/fixture (repository=local)
+DEBUG: PackageFiles.clear() - Package files deleted (repository=local)
+DEBUG: Resetting npmrc (repository=local)
+DEBUG: Resetting npmrc (repository=local)
+DEBUG: checkOnboarding() (repository=local)
+DEBUG: isOnboarded() (repository=local)
+  [...]
+ INFO: Dependency extraction complete (repository=local, baseBranch=)
+       "stats": {
+         "managers": {
+           "dockerfile": {"fileCount": 1, "depCount": 1},
+           "npm": {"fileCount": 1, "depCount": 2}
+         },
+         "total": {"fileCount": 2, "depCount": 3}
+       }
+ INFO: Extracted dependencies (repository=local)
+       "packageFiles": {
+         "dockerfile": [
+           {
+             "deps": [
+               {
+                 "depName": "node",
+                 "packageName": "node",
+                 "currentValue": "18.20.4-alpine",
+                 "replaceString": "node:18.20.4-alpine",
+                 "autoReplaceStringTemplate": "{{depName}}{{#if newValue}}:{{newValue}}{{/if}}{{#if newDigest}}@{{newDigest}}{{/if}}",
+                 "datasource": "docker",
+                 "depType": "final"
+               }
+             ],
+             "packageFile": "Dockerfile"
+           }
+         ],
+         "npm": [
+           {
+             "deps": [
+               {
+                 "depType": "dependencies",
+                 "depName": "chalk",
+                 "currentValue": "4.1.2",
+                 "datasource": "npm",
+                 "prettyDepType": "dependency",
+                 "packageName": "chalk"
+               },
+               {
+                 "depType": "dependencies",
+                 "depName": "lodash",
+                 "currentValue": "4.17.20",
+                 "datasource": "npm",
+                 "prettyDepType": "dependency",
+                 "packageName": "lodash"
+               }
+             ],
+             "extractedConstraints": {},
+             "packageFileVersion": "1.0.0",
+             "managerData": {
+               "packageJsonName": "recipe-box",
+               "hasPackageManager": false,
+               "yarnZeroInstall": false,
+               "npmrcFileName": null
+             },
+             "skipInstalls": true,
+             "packageFile": "package.json"
+           }
+         ]
+       }

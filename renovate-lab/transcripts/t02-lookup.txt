@@ -1,0 +1,178 @@
+$ cd fixture   # the fixture from t01, still with no renovate.json in it
+$ LOG_LEVEL=debug renovate --platform=local --base-dir=~/workspace/renovate-labwork/base
+# No --dry-run flag: on the local platform the default is dryRun=lookup.
+# Extract, then look up newer versions, then stop. Nothing is written.
+# (Debug log trimmed to the decisive blocks, in the order they appeared.)
+
+ INFO: Dependency extraction complete (repository=local, baseBranch=)
+       "stats": {
+         "managers": {
+           "dockerfile": {"fileCount": 1, "depCount": 1},
+           "npm": {"fileCount": 1, "depCount": 2}
+         },
+         "total": {"fileCount": 2, "depCount": 3}
+       }
+DEBUG: hostRules: no authentication for registry.npmjs.org (repository=local)
+DEBUG: Using queue: host=registry.npmjs.org, concurrency=999 (repository=local)
+DEBUG: hostRules: no authentication for hub.docker.com (repository=local)
+DEBUG: Using queue: host=hub.docker.com, concurrency=16 (repository=local)
+DEBUG: http cache: saving https://registry.npmjs.org/chalk (etag=W/"f3a91dc854f5dc88c385bfa986b8d3cd", lastModified=Sun, 27 Sep 2026 03:40:46 GMT) (repository=local)
+  [...]
+DEBUG: Using queue: host=index.docker.io, concurrency=16 (repository=local)
+DEBUG: Using queue: host=auth.docker.io, concurrency=16 (repository=local)
+DEBUG: GET https://auth.docker.io/token?scope=repository%3Alibrary%2Fnode%3Apull&service=registry.docker.io = (code=ECONNRESET, statusCode=-1 retryCount=2, duration=440) (repository=local)
+ WARN: docker registry connection failure (repository=local)
+       "registryHost": "https://index.docker.io",
+       "dockerRepository": "library/node",
+       "err": {
+         "name": "RequestError",
+         "code": "ECONNRESET",
+         "timings": {
+           "start": 1793399470568,
+           "socket": 1793399470869,
+           "lookup": 1793399470869,
+           "method": "GET",
+           "http2": false
+         },
+         "message": "socket hang up"
+       }
+       RequestError: socket hang up
+           at emitRequestError (file:///home/hatch/workspace/renovate-labwork/tools/node_modules/got/dist/source/core/index.js:1378:108)
+           at file:///home/hatch/workspace/renovate-labwork/tools/node_modules/got/dist/source/core/index.js:1403:21
+           at node:internal/process/task_queues:151:7
+           at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+           at AsyncResource.runMicrotask (node:internal/process/task_queues:148:8)
+           at processTicksAndRejections (node:internal/process/task_queues:104:5)
+           at TLSSocket.socketOnEnd (node:_http_client:798:25)
+  [...]
+       "dependencyStatus": {"outdated": 2, "total": 3}
+DEBUG: branchifyUpgrades (repository=local)
+DEBUG: detectSemanticCommits() (repository=local)
+DEBUG: getCommitMessages (repository=local)
+DEBUG: semanticCommits: score=0 (repository=local)
+DEBUG: semanticCommits: disabled (repository=local)
+DEBUG: 2 flattened updates found: chalk, lodash (repository=local)
+DEBUG: Returning 2 branch(es) (repository=local)
+DEBUG: Branch is not pending, removing pending upgrades (repository=local, branch=renovate/chalk-6.x)
+DEBUG: Branch is not pending, removing pending upgrades (repository=local, branch=renovate/lodash-4.x)
+DEBUG: config.repoIsOnboarded=false (repository=local)
+DEBUG: packageFiles with updates (repository=local, baseBranch=)
+       "config": {
+  [...]
+# The two npm results, from the "packageFiles with updates" block:
+         "npm": [
+           {
+             "deps": [
+               {
+                 "depType": "dependencies",
+                 "depName": "chalk",
+                 "currentValue": "4.1.2",
+                 "datasource": "npm",
+                 "prettyDepType": "dependency",
+                 "packageName": "chalk",
+                 "updates": [
+                   {
+                     "bucket": "major",
+                     "newVersion": "6.0.1",
+                     "newValue": "6.0.1",
+                     "hasAttestation": false,
+                     "downloadUrl": "https://registry.npmjs.org/chalk/-/chalk-6.0.1.tgz",
+                     "newDigest": "sha512-/Ce6KNm3vIbWdMlNna6RVIZ/ICQxnJxCicet5LBKK9ZffBkqzDw0xh9EiKSljdRtiIQ1S1z4YgcscUUGzNCWrA==",
+                     "releaseTimestamp": "2026-09-27T03:40:44.397Z",
+                     "newVersionAgeInDays": 33,
+                     "newMajor": 6,
+                     "newMinor": 0,
+                     "newPatch": 1,
+                     "updateType": "major",
+                     "isBreaking": true,
+                     "libYears": 5.160688468987823,
+                     "branchName": "renovate/chalk-6.x"
+                   }
+                 ],
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/chalk/chalk",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "mostRecentTimestamp": "2026-09-27T03:40:44.397Z",
+                 "currentVersion": "4.1.2",
+                 "currentVersionTimestamp": "2021-07-30T12:02:52.839Z",
+                 "currentVersionAgeInDays": 1918,
+                 "isSingleVersion": true,
+                 "fixedVersion": "4.1.2"
+               },
+               {
+                 "depType": "dependencies",
+                 "depName": "lodash",
+                 "currentValue": "4.17.20",
+                 "datasource": "npm",
+                 "prettyDepType": "dependency",
+                 "packageName": "lodash",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "4.18.1",
+                     "newValue": "4.18.1",
+                     "hasAttestation": false,
+                     "downloadUrl": "https://registry.npmjs.org/lodash/-/lodash-4.18.1.tgz",
+                     "newDigest": "sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==",
+                     "releaseTimestamp": "2026-04-01T21:01:20.458Z",
+                     "newVersionAgeInDays": 212,
+                     "newMajor": 4,
+                     "newMinor": 18,
+                     "newPatch": 1,
+                     "updateType": "minor",
+                     "isBreaking": false,
+                     "libYears": 5.633347485603754,
+                     "branchName": "renovate/lodash-4.x"
+                   }
+                 ],
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/lodash/lodash",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "homepage": "https://lodash.com/",
+                 "mostRecentTimestamp": "2026-04-01T21:01:20.458Z",
+                 "currentVersion": "4.17.20",
+                 "currentVersionTimestamp": "2020-08-13T16:53:54.152Z",
+                 "currentVersionAgeInDays": 2269,
+                 "isSingleVersion": true,
+                 "fixedVersion": "4.17.20"
+               }
+             ],
+             "extractedConstraints": {},
+             "packageFileVersion": "1.0.0",
+             "managerData": {
+               "packageJsonName": "recipe-box",
+               "hasPackageManager": false,
+               "yarnZeroInstall": false,
+               "npmrcFileName": null
+             },
+             "skipInstalls": true,
+             "packageFile": "package.json"
+           }
+         ]
+       }
+DEBUG: detectSemanticCommits() (repository=local)
+DEBUG: semanticCommits: returning "disabled" from cache (repository=local)
+  [...]
+       }
+DEBUG: detectSemanticCommits() (repository=local)
+DEBUG: semanticCommits: returning "disabled" from cache (repository=local)
+DEBUG: repository problems (repository=local)
+       "repoProblems": [
+         "⚠️ WARN: Unknown error fetching default owner preset",
+         "⚠️ WARN: docker registry connection failure"
+       ]
+DEBUG: Repository timing splits (milliseconds) (repository=local)
+       "splits": {"init": 788, "onboarding": 0, "extract": 216, "lookup": 10660, "update": 0},
+DEBUG: Cache fallback URLs (repository=local)
+       "count": 0,
+       "hits": {}
+DEBUG: Git operations statistics (repository=local)
+ INFO: Repository finished (repository=local)
+       "cloned": undefined,
+       "durationMs": 11702,
+       "result": undefined,
+       "status": undefined,
+       "enabled": undefined,
+       "onboarded": undefined,

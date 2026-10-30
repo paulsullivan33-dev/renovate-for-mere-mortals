@@ -1,0 +1,116 @@
+# Same fixture as t01/t02, now with the validated renovate-good.json
+# committed into it under the name renovate.json:
+
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "schedule": ["before 6am on monday"],
+  "packageRules": [
+    {
+      "matchManagers": ["npm"],
+      "groupName": "npm packages"
+    },
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
+    }
+  ]
+}
+
+$ LOG_LEVEL=debug renovate --platform=local --base-dir=~/workspace/renovate-labwork/base
+
+DEBUG: Config file exists, fileName: renovate.json (repository=local)
+DEBUG: Repo is onboarded (repository=local)
+DEBUG: Got file list using git (repository=local)
+DEBUG: Found renovate.json config file (repository=local)
+DEBUG: Repository config (repository=local)
+       "fileName": "renovate.json",
+       "config": {
+         "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+         "extends": ["config:recommended"],
+         "schedule": ["before 6am on monday"],
+         "packageRules": [
+           {"matchManagers": ["npm"], "groupName": "npm packages"},
+           {
+             "matchUpdateTypes": ["minor", "patch"],
+             "matchCurrentVersion": "!/^0/",
+             "automerge": true
+           }
+         ]
+       }
+DEBUG: migrateAndValidate() (repository=local)
+  [...]
+DEBUG: semanticCommits: score=0 (repository=local)
+DEBUG: semanticCommits: disabled (repository=local)
+DEBUG: 4 flattened updates found: node, node, chalk, lodash (repository=local)
+DEBUG: Returning 4 branch(es) (repository=local)
+DEBUG: Branch is not pending, removing pending upgrades (repository=local, branch=renovate/node-18.x)
+DEBUG: Branch is not pending, removing pending upgrades (repository=local, branch=renovate/node-26.x)
+DEBUG: Branch is not pending, removing pending upgrades (repository=local, branch=renovate/major-npm-packages)
+DEBUG: Branch is not pending, removing pending upgrades (repository=local, branch=renovate/npm-packages)
+DEBUG: config.repoIsOnboarded=true (repository=local)
+  [...]
+# The Docker Hub lookup that failed in t02 succeeded this time.
+# The node result, complete:
+             "deps": [
+               {
+                 "depName": "node",
+                 "packageName": "node",
+                 "currentValue": "18.20.4-alpine",
+                 "replaceString": "node:18.20.4-alpine",
+                 "autoReplaceStringTemplate": "{{depName}}{{#if newValue}}:{{newValue}}{{/if}}{{#if newDigest}}@{{newDigest}}{{/if}}",
+                 "datasource": "docker",
+                 "depType": "final",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "18.20.8",
+                     "newValue": "18.20.8-alpine",
+                     "newMajor": 18,
+                     "newMinor": 20,
+                     "newPatch": 8,
+                     "updateType": "patch",
+                     "isBreaking": false,
+                     "branchName": "renovate/node-18.x"
+                   },
+                   {
+                     "bucket": "major",
+                     "newVersion": "26.13.0",
+                     "newValue": "26.13.0-alpine",
+                     "newMajor": 26,
+                     "newMinor": 13,
+                     "newPatch": 0,
+                     "updateType": "major",
+                     "isBreaking": true,
+                     "branchName": "renovate/node-26.x"
+                   }
+                 ],
+                 "versioning": "node",
+                 "warnings": [],
+                 "currentCompatibility": "-alpine",
+                 "sourceUrl": "https://github.com/nodejs/node",
+                 "registryUrl": "https://index.docker.io",
+                 "homepage": "https://hub.docker.com/_/node",
+                 "lookupName": "library/node",
+                 "currentVersion": "18.20.4",
+                 "isSingleVersion": true,
+                 "fixedVersion": "18.20.4"
+               }
+             ],
+             "packageFile": "Dockerfile"
+           }
+         ],
+         "npm": [
+           {
+             "deps": [
+  [...]
+# And the two npm updates now carry group branch names:
+                 "depName": "chalk",
+                     "branchName": "renovate/major-npm-packages"
+                 "depName": "lodash",
+                     "branchName": "renovate/npm-packages"
+
+# Two groups, not one: with separateMajorMinor at its default (true),
+# the major update (chalk) is grouped separately from the non-major
+# one (lodash), even though both matched the same groupName rule.

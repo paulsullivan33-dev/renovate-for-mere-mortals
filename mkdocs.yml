@@ -1,0 +1,30 @@
+site_name: Renovate for Mere Mortals
+site_description: A robot that keeps a project's borrowed code up to date. How Renovate reads your files, checks registries for new versions, and opens pull requests you control, with grouping, scheduling and careful automerge, and the limits stated plainly.
+site_url: https://paulsullivan33-dev.github.io/renovate-for-mere-mortals/
+copyright: 'Part of <a href="https://paulsullivan33-dev.github.io/mere-mortals/">For Mere Mortals</a> · Text CC BY 4.0, code MIT'
+
+# Guides live at the repo root (nice for GitHub browsing).
+# The deploy workflow copies them into docs/ before building.
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - What Renovate Is: what-renovate-is.md
+  - The Moving Parts: the-moving-parts.md
+  - Installing Renovate: installing-renovate.md
+  - Your First Dry Run: your-first-dry-run.md
+  - Managers — How Renovate Reads a Project: managers.md
+  - Datasources — Where Version Truth Comes From: datasources.md
+  - Configuring Renovate: configuring-renovate.md
+  - Onboarding and the Dependency Dashboard: onboarding-and-the-dashboard.md
+  - Branches, Groups and Schedules: branches-groups-and-schedules.md
+  - Automerge and Trust: automerge-and-trust.md
+  - Lock Files and Digest Pinning: lock-files-and-digests.md
+  - Running Renovate for Real: running-renovate-for-real.md
+  - Recipes: recipes.md
+  - The Neighbours: the-neighbours.md
+  - Limits: limits.md
+  - Troubleshooting: troubleshooting.md
+  - Glossary: glossary.md
+  - Writing Criteria: criteria.md

@@ -1,0 +1,35 @@
+# The fixture gains a lock file and one more config line.
+# In the fixture directory:
+
+$ npm install --package-lock-only
+# creates package-lock.json holding chalk 4.1.2 and lodash 4.17.20 —
+# the exact versions package.json names. The ranges in package.json
+# already allow newer versions; the lock file is what holds them back.
+
+# and renovate.json gains:
+#   "lockFileMaintenance": { "enabled": true }
+
+$ LOG_LEVEL=debug renovate --platform=local --base-dir=~/workspace/renovate-labwork/base
+
+# Extraction now sees the lock file:
+             "extractedConstraints": {"npm": ">=7"},
+               "npmLock": "package-lock.json",
+             "lockFiles": ["package-lock.json"]
+  [...]
+DEBUG: 5 flattened updates found: node, node, chalk, lodash (repository=local)
+DEBUG: Returning 5 branch(es) (repository=local)
+DEBUG: Branch is not pending, removing pending upgrades (repository=local, branch=renovate/node-18.x)
+DEBUG: Branch is not pending, removing pending upgrades (repository=local, branch=renovate/node-26.x)
+DEBUG: Branch is not pending, removing pending upgrades (repository=local, branch=renovate/major-npm-packages)
+DEBUG: Branch is not pending, removing pending upgrades (repository=local, branch=renovate/npm-packages)
+DEBUG: Branch is not pending, removing pending upgrades (repository=local, branch=renovate/lock-file-maintenance-npm-packages)
+DEBUG: config.repoIsOnboarded=true (repository=local)
+DEBUG: packageFiles with updates (repository=local, baseBranch=)
+
+# Five branches now, not four. The new one, renovate/lock-file-maintenance-npm-packages,
+# carries no version change at all: on a real platform Renovate would open a
+# pull request that only regenerates package-lock.json, refreshing every
+# transitive dependency the lock file pins. It inherited the "npm packages"
+# group name because lock file maintenance passes through packageRules too.
+# This run also answered from cache (the log reports 0 HTTP requests and
+# a lookup phase of about 1.1 s, against 10.7 s for the cold run in t02).
